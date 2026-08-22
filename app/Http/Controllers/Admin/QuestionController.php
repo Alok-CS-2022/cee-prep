@@ -54,6 +54,10 @@ class QuestionController extends Controller
     {
         $validated = $this->validateQuestion($request);
 
+        if ($request->hasFile('image')) {
+            $validated['image_path'] = $request->file('image')->store('question-images', 'public');
+        }
+
         Question::create($validated);
 
         return redirect()->route('admin.questions.index')->with('success', 'Question created successfully.');
@@ -71,6 +75,18 @@ class QuestionController extends Controller
     {
         $validated = $this->validateQuestion($request);
 
+        if ($request->boolean('remove_image') && $question->image_path) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($question->image_path);
+            $validated['image_path'] = null;
+        }
+
+        if ($request->hasFile('image')) {
+            if ($question->image_path) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($question->image_path);
+            }
+            $validated['image_path'] = $request->file('image')->store('question-images', 'public');
+        }
+
         $question->update($validated);
 
         return redirect()->route('admin.questions.index')->with('success', 'Question updated successfully.');
@@ -78,6 +94,10 @@ class QuestionController extends Controller
 
     public function destroy(Question $question)
     {
+        if ($question->image_path) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($question->image_path);
+        }
+
         $question->delete();
 
         return redirect()->route('admin.questions.index')->with('success', 'Question deleted successfully.');
@@ -97,6 +117,7 @@ class QuestionController extends Controller
             'difficulty' => 'required|in:easy,medium,hard',
             'cognitive_level' => 'nullable|in:recall,understanding,application',
             'explanation' => 'nullable|string',
+            'image' => 'nullable|image|max:2048',
             'source' => 'nullable|string|max:255',
             'year' => 'nullable|string|max:10',
             'status' => 'required|in:draft,active,inactive',

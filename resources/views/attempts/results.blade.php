@@ -112,6 +112,9 @@
                                 </span>
                             </div>
                             <div class="text-xs text-gray-500 mb-2">{{ $item['subject'] }}</div>
+                            @if ($item['image_url'])
+                                <img src="{{ $item['image_url'] }}" alt="Question diagram" class="max-w-full mb-2 rounded border">
+                            @endif
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-sm mb-2">
                                 @foreach (['A' => 'option_a', 'B' => 'option_b', 'C' => 'option_c', 'D' => 'option_d'] as $letter => $field)
                                     <div class="px-2 py-1 rounded

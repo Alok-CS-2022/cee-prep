@@ -18,6 +18,7 @@ class Question extends Model
         'difficulty',
         'cognitive_level',
         'explanation',
+        'image_path',
         'source',
         'year',
         'status',

@@ -66,6 +66,7 @@ class AttemptController extends Controller
                 'option_c' => $q->option_c,
                 'option_d' => $q->option_d,
                 'subject' => $q->subject->name ?? '',
+                'image_url' => $q->image_path ? \Illuminate\Support\Facades\Storage::url($q->image_path) : null,
             ];
         })->values();
 
@@ -174,6 +175,7 @@ class AttemptController extends Controller
                 'outcome' => $outcome,
                 'explanation' => $q->explanation,
                 'subject' => $subjectName,
+                'image_url' => $q->image_path ? \Illuminate\Support\Facades\Storage::url($q->image_path) : null,
             ];
         }
 

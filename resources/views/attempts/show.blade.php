@@ -35,6 +35,10 @@
 
                             <p class="text-gray-800 font-medium mb-4" x-text="q.question"></p>
 
+                            <template x-if="q.image_url">
+                                <img :src="q.image_url" alt="Question diagram" class="max-w-full mb-4 rounded border">
+                            </template>
+
                             <div class="space-y-2">
                                 <template x-for="opt in ['A','B','C','D']" :key="opt">
                                     <label class="flex items-center gap-3 p-3 border rounded-md cursor-pointer"

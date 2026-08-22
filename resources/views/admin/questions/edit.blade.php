@@ -9,7 +9,7 @@
         <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm rounded-lg p-6">
 
-                <form action="{{ route('admin.questions.update', $question) }}" method="POST">
+                <form action="{{ route('admin.questions.update', $question) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 

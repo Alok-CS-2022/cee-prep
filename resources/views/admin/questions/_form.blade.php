@@ -129,6 +129,26 @@
     @enderror
 </div>
 
+<div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700 mb-1">Diagram / Image (optional)</label>
+
+    @if (! empty($question->image_path))
+        <div class="mb-2">
+            <img src="{{ Storage::url($question->image_path) }}" alt="Question image" class="max-w-xs rounded border">
+            <label class="flex items-center gap-2 mt-1 text-sm text-gray-600">
+                <input type="checkbox" name="remove_image" value="1">
+                Remove this image
+            </label>
+        </div>
+    @endif
+
+    <input type="file" name="image" accept="image/*" class="w-full border-gray-300 rounded-md shadow-sm">
+    <p class="text-xs text-gray-500 mt-1">Upload a diagram if this question needs one (JPG, PNG, max 2MB).</p>
+    @error('image')
+        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+    @enderror
+</div>
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
     <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Source (optional)</label>
