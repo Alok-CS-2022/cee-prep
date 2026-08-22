@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AttemptController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TopicController;
@@ -22,6 +23,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/exams/{exam}/start', [AttemptController::class, 'start'])->name('attempts.start');
+    Route::get('/attempts/{attempt}', [AttemptController::class, 'show'])->name('attempts.show');
+    Route::post('/attempts/{attempt}/save-answer', [AttemptController::class, 'saveAnswer'])->name('attempts.save-answer');
+    Route::post('/attempts/{attempt}/submit', [AttemptController::class, 'submit'])->name('attempts.submit');
+    Route::get('/attempts/{attempt}/results', [AttemptController::class, 'results'])->name('attempts.results');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
