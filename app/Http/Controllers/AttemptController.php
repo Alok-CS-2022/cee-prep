@@ -125,7 +125,75 @@ class AttemptController extends Controller
     {
         abort_if($attempt->user_id !== auth()->id(), 403);
 
-        return view('attempts.results', compact('attempt'));
+        $exam = $attempt->exam()->with(['examQuestions.question.subject', 'examQuestions.question.topic'])->first();
+        $examQuestions = $exam->examQuestions()->with(['question.subject', 'question.topic'])->orderBy('order')->get();
+
+        $answers = AttemptAnswer::where('attempt_id', $attempt->id)->get()->keyBy('question_id');
+
+        $subjectStats = [];
+        $topicStats = [];
+        $reviewData = [];
+
+        foreach ($examQuestions as $eq) {
+            $q = $eq->question;
+            $answer = $answers->get($q->id);
+            $selected = $answer->selected_option ?? null;
+
+            if (! $selected) {
+                $outcome = 'unanswered';
+            } elseif ($selected === $q->correct_option) {
+                $outcome = 'correct';
+            } else {
+                $outcome = 'wrong';
+            }
+
+            $subjectName = $q->subject->name ?? 'Unknown';
+            if (! isset($subjectStats[$subjectName])) {
+                $subjectStats[$subjectName] = ['correct' => 0, 'wrong' => 0, 'unanswered' => 0, 'total' => 0];
+            }
+            $subjectStats[$subjectName][$outcome]++;
+            $subjectStats[$subjectName]['total']++;
+
+            $topicName = $q->topic->name ?? null;
+            if ($topicName) {
+                if (! isset($topicStats[$topicName])) {
+                    $topicStats[$topicName] = ['correct' => 0, 'wrong' => 0, 'unanswered' => 0, 'total' => 0];
+                }
+                $topicStats[$topicName][$outcome]++;
+                $topicStats[$topicName]['total']++;
+            }
+
+            $reviewData[] = [
+                'question' => $q->question,
+                'option_a' => $q->option_a,
+                'option_b' => $q->option_b,
+                'option_c' => $q->option_c,
+                'option_d' => $q->option_d,
+                'correct_option' => $q->correct_option,
+                'selected_option' => $selected,
+                'outcome' => $outcome,
+                'explanation' => $q->explanation,
+                'subject' => $subjectName,
+            ];
+        }
+
+        foreach ($subjectStats as $name => $stats) {
+            $subjectStats[$name]['accuracy'] = $stats['total'] > 0
+                ? round(($stats['correct'] / $stats['total']) * 100, 1)
+                : 0;
+        }
+
+        $weakTopics = [];
+        foreach ($topicStats as $name => $stats) {
+            $accuracy = $stats['total'] > 0 ? round(($stats['correct'] / $stats['total']) * 100, 1) : 0;
+            $topicStats[$name]['accuracy'] = $accuracy;
+            if ($accuracy < 50) {
+                $weakTopics[] = ['name' => $name, 'accuracy' => $accuracy] + $stats;
+            }
+        }
+        usort($weakTopics, fn ($a, $b) => $a['accuracy'] <=> $b['accuracy']);
+
+        return view('attempts.results', compact('attempt', 'subjectStats', 'topicStats', 'weakTopics', 'reviewData'));
     }
 
     private function finalizeSubmit(Attempt $attempt, string $status): void
