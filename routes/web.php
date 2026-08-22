@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\QuestionImportController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -26,6 +27,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('subjects', SubjectController::class)->except(['show']);
     Route::resource('topics', TopicController::class)->except(['show']);
     Route::resource('questions', QuestionController::class)->except(['show']);
+    Route::get('/questions-import', [QuestionImportController::class, 'showUploadForm'])->name('questions.import');
+    Route::post('/questions-import/preview', [QuestionImportController::class, 'preview'])->name('questions.import.preview');
+    Route::post('/questions-import/confirm', [QuestionImportController::class, 'confirm'])->name('questions.import.confirm');
 });
 
 require __DIR__.'/auth.php';

@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Questions
@@ -14,9 +14,12 @@
                 </div>
             @endif
 
-            <div class="mb-4 flex justify-between items-center">
+            <div class="mb-4 flex justify-between items-center gap-3">
                 <a href="{{ route('admin.questions.create') }}" class="inline-block bg-indigo-200 text-black font-semibold px-5 py-2.5 rounded-md shadow hover:bg-indigo-300 border border-indigo-400">
                     + Add Question
+                </a>
+                <a href="{{ route('admin.questions.import') }}" class="inline-block bg-indigo-200 text-black font-semibold px-5 py-2.5 rounded-md shadow hover:bg-indigo-300 border border-indigo-400">
+                    Bulk Import (CSV)
                 </a>
             </div>
 
@@ -111,3 +114,4 @@
         </div>
     </div>
 </x-app-layout>
+
