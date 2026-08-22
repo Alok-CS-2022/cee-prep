@@ -23,6 +23,25 @@
                     </div>
                 </div>
 
+                @if (count($overallWeakTopics) > 0)
+                    <div class="bg-yellow-50 border border-yellow-200 shadow-sm rounded-lg p-6">
+                        <h3 class="font-semibold text-gray-800 mb-1">Weak Areas Overall</h3>
+                        <p class="text-xs text-gray-500 mb-4">Topics with below 50% accuracy across all your exams so far</p>
+                        <ul class="space-y-2">
+                            @foreach ($overallWeakTopics as $topic)
+                                <li class="flex justify-between items-center bg-white rounded-md px-4 py-2 border border-yellow-100">
+                                    <span class="font-medium text-sm">{{ $topic['name'] }}</span>
+                                    <span class="text-xs text-gray-500">
+                                        {{ $topic['correct'] }}/{{ $topic['total'] }} correct
+                                        &middot;
+                                        <span class="font-semibold text-yellow-700">{{ $topic['accuracy'] }}%</span>
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
                 @if ($chartData->count() > 1)
                     @php
                         $scores = $chartData->pluck('score');

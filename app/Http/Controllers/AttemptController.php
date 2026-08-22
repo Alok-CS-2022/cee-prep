@@ -215,7 +215,48 @@ class AttemptController extends Controller
             ? round($attempts->avg('score'), 2)
             : 0;
 
-        return view('attempts.history', compact('attempts', 'chartData', 'averageScore'));
+        // Aggregate topic performance across ALL attempts to find overall weak areas.
+        $overallTopicStats = [];
+        $attemptIds = $attempts->pluck('id');
+
+        if ($attemptIds->isNotEmpty()) {
+            $allAnswers = AttemptAnswer::whereIn('attempt_id', $attemptIds)
+                ->with('question.topic')
+                ->get();
+
+            foreach ($allAnswers as $answer) {
+                $question = $answer->question;
+                $topicName = $question->topic->name ?? null;
+
+                if (! $topicName) {
+                    continue;
+                }
+
+                if (! isset($overallTopicStats[$topicName])) {
+                    $overallTopicStats[$topicName] = ['correct' => 0, 'wrong' => 0, 'unanswered' => 0, 'total' => 0];
+                }
+
+                if (! $answer->selected_option) {
+                    $overallTopicStats[$topicName]['unanswered']++;
+                } elseif ($answer->selected_option === $question->correct_option) {
+                    $overallTopicStats[$topicName]['correct']++;
+                } else {
+                    $overallTopicStats[$topicName]['wrong']++;
+                }
+                $overallTopicStats[$topicName]['total']++;
+            }
+        }
+
+        $overallWeakTopics = [];
+        foreach ($overallTopicStats as $name => $stats) {
+            $accuracy = $stats['total'] > 0 ? round(($stats['correct'] / $stats['total']) * 100, 1) : 0;
+            if ($accuracy < 50) {
+                $overallWeakTopics[] = ['name' => $name, 'accuracy' => $accuracy] + $stats;
+            }
+        }
+        usort($overallWeakTopics, fn ($a, $b) => $a['accuracy'] <=> $b['accuracy']);
+
+        return view('attempts.history', compact('attempts', 'chartData', 'averageScore', 'overallWeakTopics'));
     }
 
     private function finalizeSubmit(Attempt $attempt, string $status): void
