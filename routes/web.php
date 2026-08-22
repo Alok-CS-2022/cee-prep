@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuestionImportController;
 use App\Http\Controllers\Admin\ExamConfigurationController;
+use App\Http\Controllers\Admin\ExamGeneratorController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,6 +33,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/questions-import/preview', [QuestionImportController::class, 'preview'])->name('questions.import.preview');
     Route::post('/questions-import/confirm', [QuestionImportController::class, 'confirm'])->name('questions.import.confirm');
     Route::resource('exam-configurations', ExamConfigurationController::class)->except(['show']);
+    Route::get('/exam-generator', [ExamGeneratorController::class, 'index'])->name('exam-generator.index');
+    Route::post('/exam-generator/generate', [ExamGeneratorController::class, 'generate'])->name('exam-generator.generate');
 });
 
 require __DIR__.'/auth.php';

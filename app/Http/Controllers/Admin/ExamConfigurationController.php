@@ -39,6 +39,10 @@ class ExamConfigurationController extends Controller
             'subject_distribution.*' => 'required|integer|min:0',
         ]);
 
+        if ($request->boolean('is_active')) {
+            ExamConfiguration::where('is_active', true)->update(['is_active' => false]);
+        }
+
         $totalQuestions = array_sum($validated['subject_distribution']);
 
         ExamConfiguration::create([
@@ -78,6 +82,10 @@ class ExamConfigurationController extends Controller
             'subject_distribution' => 'required|array',
             'subject_distribution.*' => 'required|integer|min:0',
         ]);
+
+        if ($request->boolean('is_active')) {
+            ExamConfiguration::where('is_active', true)->where('id', '!=', $examConfiguration->id)->update(['is_active' => false]);
+        }
 
         $totalQuestions = array_sum($validated['subject_distribution']);
 
