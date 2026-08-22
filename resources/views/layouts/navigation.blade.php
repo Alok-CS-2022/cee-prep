@@ -15,6 +15,34 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if (Auth::user()->isAdmin())
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            Admin Home
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.subjects.index')" :active="request()->routeIs('admin.subjects.*')">
+                            Subjects
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.topics.index')" :active="request()->routeIs('admin.topics.*')">
+                            Topics
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.questions.index')" :active="request()->routeIs('admin.questions.*')">
+                            Questions
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.exam-configurations.index')" :active="request()->routeIs('admin.exam-configurations.*')">
+                            Exam Config
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.exam-generator.index')" :active="request()->routeIs('admin.exam-generator.*')">
+                            Exam Generator
+                        </x-nav-link>
+                    @else
+                        <x-nav-link :href="route('attempts.exams-index')" :active="request()->routeIs('attempts.exams-index')">
+                            Take Exam
+                        </x-nav-link>
+                        <x-nav-link :href="route('attempts.history')" :active="request()->routeIs('attempts.history')">
+                            My History
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -70,6 +98,34 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if (Auth::user()->isAdmin())
+                <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                    Admin Home
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.subjects.index')" :active="request()->routeIs('admin.subjects.*')">
+                    Subjects
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.topics.index')" :active="request()->routeIs('admin.topics.*')">
+                    Topics
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.questions.index')" :active="request()->routeIs('admin.questions.*')">
+                    Questions
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.exam-configurations.index')" :active="request()->routeIs('admin.exam-configurations.*')">
+                    Exam Config
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.exam-generator.index')" :active="request()->routeIs('admin.exam-generator.*')">
+                    Exam Generator
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('attempts.exams-index')" :active="request()->routeIs('attempts.exams-index')">
+                    Take Exam
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('attempts.history')" :active="request()->routeIs('attempts.history')">
+                    My History
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->

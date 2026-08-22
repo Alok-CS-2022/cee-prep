@@ -196,6 +196,19 @@ class AttemptController extends Controller
         return view('attempts.results', compact('attempt', 'subjectStats', 'topicStats', 'weakTopics', 'reviewData'));
     }
 
+    public function examsIndex()
+    {
+        $exams = Exam::with('examConfiguration')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $myAttempts = Attempt::where('user_id', auth()->id())
+            ->get()
+            ->keyBy('exam_id');
+
+        return view('attempts.exams-index', compact('exams', 'myAttempts'));
+    }
+
     public function history()
     {
         $attempts = Attempt::with('exam.examConfiguration')

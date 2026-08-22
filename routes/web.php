@@ -24,6 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/exams', [AttemptController::class, 'examsIndex'])->name('attempts.exams-index');
     Route::get('/exams/{exam}/start', [AttemptController::class, 'start'])->name('attempts.start');
     Route::get('/attempts/{attempt}', [AttemptController::class, 'show'])->name('attempts.show');
     Route::post('/attempts/{attempt}/save-answer', [AttemptController::class, 'saveAnswer'])->name('attempts.save-answer');
