@@ -11,6 +11,12 @@
                 <div class="p-6 text-gray-900">
                     {{ __("You're logged in!") }}
                 </div>
+                <div class="px-6 pb-6">
+                    <a href="{{ route('attempts.history') }}"
+                        class="inline-block bg-indigo-200 text-black font-semibold px-5 py-2.5 rounded-md shadow hover:bg-indigo-300 border border-indigo-400">
+                        View Performance History
+                    </a>
+                </div>
             </div>
         </div>
     </div>

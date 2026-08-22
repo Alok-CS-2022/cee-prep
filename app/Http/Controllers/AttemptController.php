@@ -196,6 +196,28 @@ class AttemptController extends Controller
         return view('attempts.results', compact('attempt', 'subjectStats', 'topicStats', 'weakTopics', 'reviewData'));
     }
 
+    public function history()
+    {
+        $attempts = Attempt::with('exam.examConfiguration')
+            ->where('user_id', auth()->id())
+            ->whereIn('status', ['submitted', 'expired'])
+            ->orderBy('submitted_at', 'desc')
+            ->get();
+
+        $chartData = $attempts->sortBy('submitted_at')->map(function ($a) {
+            return [
+                'date' => $a->submitted_at ? $a->submitted_at->format('d M') : '',
+                'score' => (float) $a->score,
+            ];
+        })->values();
+
+        $averageScore = $attempts->count() > 0
+            ? round($attempts->avg('score'), 2)
+            : 0;
+
+        return view('attempts.history', compact('attempts', 'chartData', 'averageScore'));
+    }
+
     private function finalizeSubmit(Attempt $attempt, string $status): void
     {
         $exam = $attempt->exam;

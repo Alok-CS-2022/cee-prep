@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/attempts/{attempt}/save-answer', [AttemptController::class, 'saveAnswer'])->name('attempts.save-answer');
     Route::post('/attempts/{attempt}/submit', [AttemptController::class, 'submit'])->name('attempts.submit');
     Route::get('/attempts/{attempt}/results', [AttemptController::class, 'results'])->name('attempts.results');
+    Route::get('/attempts-history', [AttemptController::class, 'history'])->name('attempts.history');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
