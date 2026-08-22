@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TopicController;
 use App\Http\Controllers\Admin\QuestionController;
 use App\Http\Controllers\Admin\QuestionImportController;
+use App\Http\Controllers\Admin\ExamConfigurationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -30,6 +31,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/questions-import', [QuestionImportController::class, 'showUploadForm'])->name('questions.import');
     Route::post('/questions-import/preview', [QuestionImportController::class, 'preview'])->name('questions.import.preview');
     Route::post('/questions-import/confirm', [QuestionImportController::class, 'confirm'])->name('questions.import.confirm');
+    Route::resource('exam-configurations', ExamConfigurationController::class)->except(['show']);
 });
 
 require __DIR__.'/auth.php';
