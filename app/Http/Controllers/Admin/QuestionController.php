@@ -92,6 +92,15 @@ class QuestionController extends Controller
         return redirect()->route('admin.questions.index')->with('success', 'Question updated successfully.');
     }
 
+    public function activateAllDrafts()
+    {
+        $count = Question::where('status', 'draft')->count();
+
+        Question::where('status', 'draft')->update(['status' => 'active']);
+
+        return redirect()->route('admin.questions.index')->with('success', "Activated {$count} draft question(s).");
+    }
+
     public function destroy(Question $question)
     {
         if ($question->image_path) {

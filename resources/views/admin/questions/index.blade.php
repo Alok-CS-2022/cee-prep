@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             Questions
@@ -15,12 +15,23 @@
             @endif
 
             <div class="mb-4 flex justify-between items-center gap-3">
-                <a href="{{ route('admin.questions.create') }}" class="inline-block bg-indigo-200 text-black font-semibold px-5 py-2.5 rounded-md shadow hover:bg-indigo-300 border border-indigo-400">
-                    + Add Question
-                </a>
-                <a href="{{ route('admin.questions.import') }}" class="inline-block bg-indigo-200 text-black font-semibold px-5 py-2.5 rounded-md shadow hover:bg-indigo-300 border border-indigo-400">
-                    Bulk Import (CSV)
-                </a>
+                <div class="flex gap-3">
+                    <a href="{{ route('admin.questions.create') }}" class="inline-block bg-indigo-200 text-black font-semibold px-5 py-2.5 rounded-md shadow hover:bg-indigo-300 border border-indigo-400">
+                        + Add Question
+                    </a>
+                    <a href="{{ route('admin.questions.import') }}" class="inline-block bg-indigo-200 text-black font-semibold px-5 py-2.5 rounded-md shadow hover:bg-indigo-300 border border-indigo-400">
+                        Bulk Import (CSV)
+                    </a>
+                </div>
+                @php $draftCount = \App\Models\Question::where('status', 'draft')->count(); @endphp
+                @if ($draftCount > 0)
+                    <form action="{{ route('admin.questions.activate-drafts') }}" method="POST" onsubmit="return confirm('Activate all {{ $draftCount }} draft question(s)? This makes them usable in exams and practice.');">
+                        @csrf
+                        <button type="submit" class="inline-block bg-yellow-200 text-black font-semibold px-5 py-2.5 rounded-md shadow hover:bg-yellow-300 border border-yellow-400">
+                            Activate All Drafts ({{ $draftCount }})
+                        </button>
+                    </form>
+                @endif
             </div>
 
             <form method="GET" class="bg-white shadow-sm rounded-lg p-4 mb-4 grid grid-cols-2 md:grid-cols-5 gap-3">

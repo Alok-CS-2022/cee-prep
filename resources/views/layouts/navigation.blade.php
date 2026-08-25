@@ -42,6 +42,12 @@
                         <x-nav-link :href="route('attempts.history')" :active="request()->routeIs('attempts.history')">
                             My History
                         </x-nav-link>
+                        <x-nav-link :href="route('practice.index')" :active="request()->routeIs('practice.*')">
+                            Practice
+                        </x-nav-link>
+                        <x-nav-link :href="route('review-bank.index')" :active="request()->routeIs('review-bank.index')">
+                            Review Bank
+                        </x-nav-link>
                     @endif
                 </div>
             </div>
@@ -124,6 +130,12 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('attempts.history')" :active="request()->routeIs('attempts.history')">
                     My History
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('practice.index')" :active="request()->routeIs('practice.*')">
+                    Practice
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('review-bank.index')" :active="request()->routeIs('review-bank.index')">
+                    Review Bank
                 </x-responsive-nav-link>
             @endif
         </div>

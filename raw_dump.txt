@@ -1,8 +1,7 @@
-<?php
+﻿<?php
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AttemptController;
-use App\Http\Controllers\PracticeController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\SubjectController;
 use App\Http\Controllers\Admin\TopicController;
@@ -32,19 +31,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/attempts/{attempt}/submit', [AttemptController::class, 'submit'])->name('attempts.submit');
     Route::get('/attempts/{attempt}/results', [AttemptController::class, 'results'])->name('attempts.results');
     Route::get('/attempts-history', [AttemptController::class, 'history'])->name('attempts.history');
-
-    Route::get('/practice', [PracticeController::class, 'index'])->name('practice.index');
-    Route::get('/review-bank', [App\Http\Controllers\ReviewBankController::class, 'index'])->name('review-bank.index');
-    Route::get('/practice/{subject}', [PracticeController::class, 'topics'])->name('practice.topics');
-    Route::post('/practice/start', [PracticeController::class, 'start'])->name('practice.start');
-    Route::post('/practice/record-answer', [PracticeController::class, 'recordAnswer'])->name('practice.record-answer');
 });
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('subjects', SubjectController::class)->except(['show']);
     Route::resource('topics', TopicController::class)->except(['show']);
-    Route::post('/questions/activate-drafts', [QuestionController::class, 'activateAllDrafts'])->name('questions.activate-drafts');
     Route::resource('questions', QuestionController::class)->except(['show']);
     Route::get('/questions-import', [QuestionImportController::class, 'showUploadForm'])->name('questions.import');
     Route::post('/questions-import/preview', [QuestionImportController::class, 'preview'])->name('questions.import.preview');
@@ -55,3 +47,4 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 require __DIR__.'/auth.php';
+
